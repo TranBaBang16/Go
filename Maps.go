@@ -13,7 +13,7 @@ func WordCount(s string) map[string]int {
 	m:=make(map[string]int)
 	var word string
 	for i:=0;i<len(s);i++{
-		if string(s[i])==" "{
+		if string(s[i])==""{
 			continue
 		}
 		
