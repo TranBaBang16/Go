@@ -5,45 +5,26 @@ package main
 
 import (
 	"golang.org/x/tour/wc"
+	"strings"
 )
 
 func WordCount(s string) map[string]int {
 	m := make(map[string]int)
-	var word string
-	for i := 0; i < len(s); i++ {
-		if s[i] == ' ' {
-			continue
+	str := strings.Fields(s)
+	for i := range str{
+		_,ok := m[str[i]]
+		if ok{
+			m[str[i]]++
+		}else{
+			m[str[i]] = 1
 		}
-
-		for j := i + 1; j < len(s); j++ {
-			if j == len(s)-1 {
-				word = s[i:len(s)]
-				i = len(s)
-			} else {
-				if s[j] == ' ' {
-					word = s[i:j]
-					i = j
-				} else {
-					continue
-				}
-
-			}
-
-			_, ok := m[word]
-			if ok {
-				m[word]++
-			} else {
-				m[word] = 1
-			}
-			break
-		}
-
 	}
-
 	return m
 }
+
 
 func main() {
 	wc.Test(WordCount)
 
 }
+
