@@ -12,25 +12,15 @@ type rot13Reader struct {
 
 func (rot *rot13Reader) Read(p []byte) (n int, err error) {
 	n, error := rot.r.Read(p)
-	symb_a := 'a'
-	symb_A := 'A'
+
 	for i := range p {
 		if p[i] >= 'a' && p[i] <= 'z' {
-			if p[i] < byte(symb_a + 13) {
-				p[i] += 13
-			} else {
-				p[i] -= 13
-			}
+			p[i] = 'a' + (p[i]-'a'+13)%26
 		} else {
 			if p[i] >= 'A' && p[i] <= 'Z' {
-				if p[i] < byte(symb_A + 13) {
-					p[i] += 13
-				} else {
-					p[i] -= 13
-				}
+				p[i] = 'A' + (p[i]-'A'+13)%26
 			}
 		}
-
 	}
 	return n, error
 }
