@@ -8,12 +8,12 @@ import (
 )
 
 type Image struct {
-	w int
-	h int
+	width  int
+	height int
 }
 
 func (im Image) Bounds() image.Rectangle {
-	return image.Rect(0, 0, im.w, im.h)
+	return image.Rect(0, 0, im.width, im.height)
 }
 
 func (im Image) ColorModel() color.Model {
@@ -21,12 +21,12 @@ func (im Image) ColorModel() color.Model {
 }
 
 func (im Image) Pic() uint8 {
-	return uint8((im.w + im.h) / 2)
+	return uint8((im.width + im.height) / 2)
 }
 
 func (im Image) At(x, y int) color.Color {
-	x = im.w
-	y = im.h
+	x = im.width
+	y = im.height
 	v := im.Pic()
 	return color.RGBA{v, v, 255, 255}
 }
