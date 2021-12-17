@@ -158,9 +158,10 @@ default,
 
 --Viết lệnh sql để có thể lấy thông tin những bản ghi của projects 
 --và số lượng user của mỗi projects đó (count user)
-
-
-
+select project.id,project_name,project_spend,Project.project_variance,Project.category_id, count(users.id) as "count_user" from Project
+left join project_user on Project.id= Project_user.project_id
+left join users on Project_user.user_id=USERs.id
+group by project.id,project_name,project_spend,Project.project_variance,Project.category_id
 
 
 --viết lệnh sql để lấy ra danh sách các project của company có company_name = “monstar-lab” 
@@ -184,5 +185,16 @@ on users.id=Project_user.user_id
 inner join Project
 on Project_user.project_id=Project.id
 
---
+--lấy ra danh sách project mà có số lượng user tham gia > 10 , sắp xếp số lượng user tham gia tăng dần
+
+select project_name,
+count(users.id) as "count_user" 
+from Project
+left join project_user on Project.id= Project_user.project_id
+left join users on Project_user.user_id=USERs.id
+group by project_name
+delete fro
+--Xoá project mà chưa có user nào tham gia
+
+
 
