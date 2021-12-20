@@ -135,12 +135,12 @@ company_id
 values (
 'project_4',
 2,
-13,
-1234,
+132,
+123,
 23,
 default,
 '2021/05/30',
-3
+2
 )
 
 insert into Project_user (
@@ -150,8 +150,8 @@ created_at,
 updated_at
 )
 values (
+10,
 3,
-1,
 default,
 '2020/12/05'
 )
@@ -193,8 +193,20 @@ from Project
 left join project_user on Project.id= Project_user.project_id
 left join users on Project_user.user_id=USERs.id
 group by project_name
-delete fro
---Xoá project mà chưa có user nào tham gia
+having count(users.id)>10
+order by count(users.id) asc
 
+
+--Xoá project mà chưa có user nào tham gia
+use bang_test
+delete from project 
+where project_name = (
+select project_name
+from Project
+left join project_user on Project.id= Project_user.project_id
+left join users on Project_user.user_id=USERs.id
+group by Project.project_name
+having count(users.id)=0
+)
 
 
