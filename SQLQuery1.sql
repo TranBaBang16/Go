@@ -198,6 +198,8 @@ order by count_user asc;
 use bang_test;
 select * from project;
 
+SET SQL_SAFE_UPDATES = 0;
+
 delete from project 
 where project_name not in (
 select distinct project_name from(
