@@ -9,7 +9,7 @@ created_at timestamp default current_timestamp not null,
 updated_at timestamp default current_timestamp not null
  );
 
-create table Project (
+create table Projects (
 id bigint not null auto_increment primary key,
 project_name varchar(50) not null,
 category_id  bigint  not null,
@@ -33,7 +33,7 @@ updated_at timestamp default current_timestamp not null
 );
 
 ALTER TABLE Project_users
-add  constraint project_users_users
+add  constraint project_users_project_fk
 foreign key (project_id) references project (id);
 
 ALTER TABLE Project_users
