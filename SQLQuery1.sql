@@ -67,18 +67,18 @@ modify column user_name varchar(16) not null;
 alter table users
 modify column pass_word varchar(10) not null;
 
-alter table project
+alter table projects
 add constraint project_category_fk
 foreign key (category_id) references categories(id);
 
-alter table project
-add constraint project_companies_fk foreign key (company_id) references companies(id);
+alter table projects
+add constraint projects_companies_fk foreign key (company_id) references companies(id);
 
-alter table project
+alter table projects
 modify column project_spend int;
 
-alter table project
-modify column project_variance int;
+alter table projects
+modify column projects_variance int;
 
 alter table project
 modify column revenue_recognised int;
@@ -125,7 +125,7 @@ values (
 'mmm'
 );
 
-insert into Project (
+insert into Projects (
 project_name,
 category_id,
 project_spend,
@@ -142,7 +142,7 @@ values (
 4
 );
 
-delete from project
+delete from projects
 where project_name = 'project_3' and category_id=3;
 
 insert into Project_users (
@@ -160,35 +160,35 @@ select * from categories;
 -- Viết lệnh sql để có thể lấy thông tin những bản ghi của projects 
 -- và số lượng user của mỗi projects đó (count user)
 
-select Project.* ,count(project_users.user_id) as "count_user" from Project
-inner join project_users on Project.id = Project_users.Project_id
+select Projects.* ,count(project_users.user_id) as "count_user" from Projects
+inner join project_users on Projects.id = Project_users.Project_id
 group by id ;
 
 
 -- viết lệnh sql để lấy ra danh sách các project của company có company_name = “monstar-lab” 
 
-select * from Project
+select * from Projects
 inner join companies
-on Project.company_id = companies.id
+on Projects.company_id = companies.id
 where company_name = 'monstar-lab';
 
 -- viết lệnh sql lấy ra danh sách các công ty có project có project_spend > 100
 
 select distinct companies.company_name from companies
-inner join Project
-on Project.company_id=companies.id
-where project.project_spend>100;
+inner join Projects
+on Projects.company_id=companies.id
+where projects.project_spend>100;
 
 -- viết lệnh sql để lấy ra thông tin của user tham gia vào projects
-select distinct USERs.* from users 
+select distinct users.* from users 
 inner join Project_users on users.id = Project_users.user_id
 group by id;
 
 -- lấy ra danh sách project mà có số lượng user tham gia > 10 , sắp xếp số lượng user tham gia tăng dần
 
 select project_name, count(user_id) as "count_user" 
-from Project
-inner join project_users on Project.id= Project_users.project_id
+from Projects
+inner join project_users on Projects.id= Project_users.project_id
 group by Project_name
 having count_user > 10
 order by count_user asc;
@@ -196,14 +196,14 @@ order by count_user asc;
 
 -- Xoá project mà chưa có user nào tham gia
 use bang_test;
-select * from project;
+select * from projects;
 
 SET SQL_SAFE_UPDATES = 0;
 
-delete from project 
+delete from projects
 where project_name not in (
 select distinct project_name from(
-select distinct project.* from Project
-inner join project_users on Project.id = Project_users.project_id
+select distinct projects.* from Projects
+inner join project_users on Projects.id = Project_users.project_id
 ) as t
 )
