@@ -1,7 +1,7 @@
 -- Tạo bảng 
-Create database bang_test ;
-use bang_test;
-create table Project_users (
+Create database training_sql ;
+use training_sql;
+create table project_users (
 id bigint not null primary key auto_increment,
 project_id bigint not null ,
 user_id bigint not null,
@@ -9,7 +9,7 @@ created_at timestamp default current_timestamp not null,
 updated_at timestamp default current_timestamp not null
  );
 
-create table Projects (
+create table projects (
 id bigint not null auto_increment primary key,
 project_name varchar(50) not null,
 category_id  bigint  not null,
@@ -34,9 +34,9 @@ updated_at timestamp default current_timestamp not null
 
 ALTER TABLE Project_users
 add  constraint project_users_project_fk
-foreign key (project_id) references project (id);
+foreign key (project_id) references projects (id);
 
-ALTER TABLE Project_users
+ALTER TABLE project_users
 add  constraint project_users_users_id
 foreign key (user_id) references users (id);
 
@@ -78,9 +78,9 @@ alter table projects
 modify column project_spend int;
 
 alter table projects
-modify column projects_variance int;
+modify column project_variance int;
 
-alter table project
+alter table projects
 modify column revenue_recognised int;
 
 alter table users
@@ -125,7 +125,7 @@ values (
 'mmm'
 );
 
-insert into Projects (
+insert into projects (
 project_name,
 category_id,
 project_spend,
@@ -142,10 +142,8 @@ values (
 4
 );
 
-delete from projects
-where project_name = 'project_3' and category_id=3;
 
-insert into Project_users (
+insert into project_users (
 project_id,
 user_id
 )
@@ -153,50 +151,44 @@ values (
 6,
 2
 );
-select * from project_users;
-select * from companies;
-select * from categories;
 
 -- Viết lệnh sql để có thể lấy thông tin những bản ghi của projects 
 -- và số lượng user của mỗi projects đó (count user)
 
-select Projects.* ,count(project_users.user_id) as "count_user" from Projects
-inner join project_users on Projects.id = Project_users.Project_id
+select projects.* ,count(project_users.user_id) as "count_user" from projects
+inner join project_users on projects.id = project_users.project_id
 group by id ;
-
 
 -- viết lệnh sql để lấy ra danh sách các project của company có company_name = “monstar-lab” 
 
-select * from Projects
+select * from projects
 inner join companies
-on Projects.company_id = companies.id
+on projects.company_id = companies.id
 where company_name = 'monstar-lab';
 
 -- viết lệnh sql lấy ra danh sách các công ty có project có project_spend > 100
 
 select distinct companies.company_name from companies
-inner join Projects
-on Projects.company_id=companies.id
+inner join projects
+on projects.company_id=companies.id
 where projects.project_spend>100;
 
 -- viết lệnh sql để lấy ra thông tin của user tham gia vào projects
 select distinct users.* from users 
-inner join Project_users on users.id = Project_users.user_id
+inner join project_users on users.id = project_users.user_id
 group by id;
 
 -- lấy ra danh sách project mà có số lượng user tham gia > 10 , sắp xếp số lượng user tham gia tăng dần
 
 select project_name, count(user_id) as "count_user" 
-from Projects
-inner join project_users on Projects.id= Project_users.project_id
-group by Project_name
+from projects
+inner join project_users on projects.id= project_users.project_id
+group by project_name
 having count_user > 10
 order by count_user asc;
 
 
 -- Xoá project mà chưa có user nào tham gia
-use bang_test;
-select * from projects;
 
 SET SQL_SAFE_UPDATES = 0;
 
@@ -204,6 +196,6 @@ delete from projects
 where project_name not in (
 select distinct project_name from(
 select distinct projects.* from Projects
-inner join project_users on Projects.id = Project_users.project_id
+inner join project_users on projects.id = project_users.project_id
 ) as t
 )
